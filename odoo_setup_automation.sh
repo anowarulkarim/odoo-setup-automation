@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Function to create the odoo1 folder and its subdirectories
+# Function to create the odoo folder and its subdirectories
 create_odoo_structure() {
-    local base_dir="/opt/odoo1"
+    local base_dir="/opt/odoo"
 
-    # Step 1: Create the base directory (odoo1)
+    # Step 1: Create the base directory (odoo)
     echo "Creating base directory: $base_dir"
     sudo mkdir -p "$base_dir"
 
@@ -28,7 +28,7 @@ create_odoo_structure() {
 # Function to create a directory, initialize Git, and clone
 clone_odoo_repo() {
     local version=$1
-    local base_dir="/opt/odoo1"
+    local base_dir="/opt/odoo"
     local server_dir="$base_dir/server/odoo_${version}"
     local git_url="https://www.github.com/odoo/odoo"
     local branch="--branch ${version}.0"
@@ -53,7 +53,7 @@ clone_odoo_repo() {
 # Function to create a virtual environment
 create_virtualenv() {
     local version=$1
-    local base_dir="/opt/odoo1/venv"
+    local base_dir="/opt/odoo/venv"
     local venv_dir="$base_dir/odoo-${version}-env"
 
     # Step 1: Ensure the base directory exists
@@ -80,8 +80,8 @@ create_virtualenv() {
 
 install() {
     local version=$1
-    local server_dir="/opt/odoo1/server/odoo_${version}"
-    local venv_dir="/opt/odoo1/venv/odoo-${version}-env"
+    local server_dir="/opt/odoo/server/odoo_${version}"
+    local venv_dir="/opt/odoo/venv/odoo-${version}-env"
 
     # Step 1: Install necessary dependencies
     echo "Installing required packages..."
@@ -125,7 +125,7 @@ install() {
 
 create_conf_file() {
     local version="$1"
-    local main_folder="/opt/odoo1"
+    local main_folder="/opt/odoo"
     local conf_file="$main_folder/conf/odoo${version}.conf"
     local db_user="odoo-${version}"
     local addons_path="$main_folder/server/odoo_${version}/addons,$main_folder/server/odoo_${version}/odoo/addons"
@@ -163,8 +163,8 @@ xmlrpc_port=$xmlrpc_port
 
 create_odoo_service_file() {
     local version="$1"
-    local service_file="/etc/systemd/system/odoo1${version}.service"
-    local log_dir="/var/log/odoo1"
+    local service_file="/etc/systemd/system/odoo${version}.service"
+    local log_dir="/var/log/odoo"
 
     # Step 1: Create the log directory if it doesn't exist
     echo "Creating log directory..."
@@ -183,14 +183,14 @@ After=network.target
 Type=simple
 User=odoo
 Group=odoo
-WorkingDirectory=/opt/odoo1/server/odoo_${version}
+WorkingDirectory=/opt/odoo/server/odoo_${version}
 
 # Set environment variables for virtual environment
-Environment=\"VIRTUAL_ENV=/opt/odoo1/venv/odoo-${version}-env\"
+Environment=\"VIRTUAL_ENV=/opt/odoo/venv/odoo-${version}-env\"
 Environment=\"PATH=\$VIRTUAL_ENV/bin:\$PATH\"
-Environment=\"PYTHONPATH=/opt/odoo1/venv/odoo-${version}-env/lib/python3.12/site-packages\"
+Environment=\"PYTHONPATH=/opt/odoo/venv/odoo-${version}-env/lib/python3.12/site-packages\"
 
-ExecStart=/opt/odoo1/venv/odoo-${version}-env/bin/python3.12 /opt/odoo1/server/odoo_${version}/odoo-bin -c /opt/odoo1/conf/odoo${version}.conf
+ExecStart=/opt/odoo/venv/odoo-${version}-env/bin/python3.12 /opt/odoo/server/odoo_${version}/odoo-bin -c /opt/odoo/conf/odoo${version}.conf
 
 Restart=always
 LimitNOFILE=4096
