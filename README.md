@@ -1,0 +1,1 @@
+# odoo-setup-automation
