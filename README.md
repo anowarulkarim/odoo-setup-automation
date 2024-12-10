@@ -15,7 +15,7 @@ These scripts are intended to streamline the Odoo installation and management pr
 Before running the scripts, ensure that you have the following installed and configured on your server:
 
 - **Linux-based operating system** (e.g., Ubuntu, CentOS)
-- **Python 3.6+**
+- **Python 3.12+**
 - **pip** for Python package management
 - **Git** for cloning Odoo repositories
 - **Virtualenv** for managing Python environments
